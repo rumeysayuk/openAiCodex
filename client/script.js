@@ -25,16 +25,13 @@ function typeText(element, text) {
    let interval = setInterval(() => {
       if (index < text.length) {
          element.innerHTML += text.charAt(index)
-         index++
+         index++;
       } else {
          clearInterval(interval)
       }
    }, 20)
 }
 
-// generate unique ID for each message div of bot
-// necessary for typing text effect for that specific reply
-// without unique ID, typing text will work on every element
 function generateUniqueId() {
    const timestamp = Date.now();
    const randomNumber = Math.random();
@@ -83,10 +80,11 @@ const handleSubmit = async (e) => {
    const messageDiv = document.getElementById(uniqueId)
 
    // messageDiv.innerHTML = "..."
-   loader(messageDiv)
+   loader(messageDiv);
 
    const response = await fetch('http://localhost:5000', {
       method: 'POST',
+
       headers: {
          'Content-Type': 'application/json',
       },
@@ -96,12 +94,12 @@ const handleSubmit = async (e) => {
    })
 
    clearInterval(loadInterval)
-   messageDiv.innerHTML = " "
+   messageDiv.innerHTML = "";
 
    if (response.ok) {
       const data = await response.json();
       const parsedData = data.bot.trim() // trims any trailing spaces/'\n'
-
+      console.log({parsedData})
       typeText(messageDiv, parsedData)
    } else {
       const err = await response.text()
