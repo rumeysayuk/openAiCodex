@@ -1,4 +1,4 @@
-import {Bot, User} from "./assets/index.js";
+import {Bot, User} from './assets/index.js'
 
 const form = document.querySelector('form')
 const chatContainer = document.querySelector('#chat_container')

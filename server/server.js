@@ -9,19 +9,19 @@ const configuration = new Configuration({
    apiKey: process.env.OPENAI_API_KEY,
 })
 const openai = new OpenAIApi(configuration)
-const app = express();
-app.use(cors());
-app.use(express.json());
+const server = express();
+server.use(cors());
+server.use(express.json());
 
-app.get("/", async (req, res) => {
+server.get("/", async (req, res) => {
    res.status(200).send({
-      message: "Hello from codeX"
+      message: "Hello from codeX !"
    })
 })
 
-app.post("/", async (req, res) => {
+server.post("/", async (req, res) => {
    try {
-      const {prompt} = req.body;
+      const prompt = req.body.prompt;
 
       const response = await openai.createCompletion({
          model: "text-davinci-003",
@@ -31,17 +31,16 @@ app.post("/", async (req, res) => {
          top_p: 1,
          frequency_penalty: 0.5,
          presence_penalty: 0,
-         stop: ["\"\"\""],
       });
       res.status(200).send({
          bot: response.data.choices[0].text
       })
    } catch (e) {
       console.log("Error:", e)
-      res.status(500).send({e})
+      res.status(500).send(e || "Something went wrong")
    }
 })
 
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
    console.log(`Server is running on port ${process.env.PORT}`)
 })
